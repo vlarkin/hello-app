@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: hello-app-dev@triple-nectar-391006.iam.gserviceaccount.com
+  name: hello-app
+  namespace: dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      serviceAccountName: hello-app
+      containers:
+      - name: hello-app
+        image: gcr.io/triple-nectar-391006/hello-app/hello-app:latest
+        ports:
+        - containerPort: 5000
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: iam.gke.io/gke-metadata-server-enabled
+                operator: In
+                values:
+                - "true"
