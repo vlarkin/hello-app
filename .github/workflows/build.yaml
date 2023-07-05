@@ -46,7 +46,7 @@ jobs:
       run: docker build -t ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.GKE_PROJECT_ID }}/${{ env.DOCKER_REPO_NAME }}/pyapp:latest pyapp
 
     - name: Publish Docker image to Google Artifact Registry
-      run: docker push ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.GKE_PROJECT_ID }}/${{ env.DOCKER_REPO_NAME }}/pyapp:latestt
+      run: docker push ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.GKE_PROJECT_ID }}/${{ env.DOCKER_REPO_NAME }}/pyapp:latest
 
     - name: Connect to GKE
       uses: google-github-actions/get-gke-credentials@v0
@@ -54,5 +54,5 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER_NAME }}
         location: ${{ env.GKE_CLUSTER_ZONE }}
 
-#    - name: Deploy to GKE
-#      run: kubectl apply -f pyapp/deployment.yaml
+    - name: Deploy to GKE
+      run: kubectl apply -f pyapp/deployment.yaml
