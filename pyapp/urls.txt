@@ -1,0 +1,4 @@
+
+Deploying to GKE using Github Actions
+https://cloud.google.com/dotnet/docs/getting-started/deploying-to-gke-using-github-actions
+https://nakamasato.medium.com/setup-github-actions-and-terraform-for-a-new-gcp-project-b740f561107
