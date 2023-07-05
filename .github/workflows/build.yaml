@@ -34,7 +34,7 @@ jobs:
         create_credentials_file: true
         token_format: access_token
         workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY }}
-        service_account: ${{ env.GCP_SERVICE_ACCOUNT_NAME }}@${{GKE_PROJECT_ID}}.iam.gserviceaccount.com
+        service_account: ${{ env.GCP_SERVICE_ACCOUNT_NAME }}@${{ env.GKE_PROJECT_ID }}.iam.gserviceaccount.com
 
     - name: Connect to Artifact Registry
       run: |-
