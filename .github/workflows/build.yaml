@@ -50,7 +50,7 @@ jobs:
       run: docker build -t eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest pyapp
 
     - name: Publish Docker image to Google Artifact Registry
-      run: docker push pyapp
+      run: docker push eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest
 
     - name: Deploy to GKE
       run: kubectl apply -f pyapp/deployment.yaml
