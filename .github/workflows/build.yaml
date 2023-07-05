@@ -42,7 +42,8 @@ jobs:
       env:
         DOCKER_REGISTRY_HOST: ${{ env.GCP_REGION }}-docker.pkg.dev
       run: |-
-        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_REGISTRY_HOST }}
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin \
+             https://${{ env.DOCKER_REGISTRY_HOST }} && echo ${{ env.DOCKER_REGISTRY_HOST }} >> $GITHUB_ENV
 
     - name: Build Docker image
       run: docker build -t ${{ env.DOCKER_REGISTRY_HOST }}/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_REGISTRY_NAME }}/pyapp:latest pyapp
