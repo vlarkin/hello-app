@@ -47,7 +47,7 @@ jobs:
         location: ${{ env.GKE_CLUSTER_ZONE }}
 
     - name: Build Docker image
-      run: docker build -t pyapp pyapp
+      run: docker build -t eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest pyapp
 
     - name: Publish Docker image to Google Artifact Registry
       run: docker push pyapp

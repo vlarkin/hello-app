@@ -30,7 +30,7 @@ spec:
       serviceAccountName: pyapp
       containers:
       - name: pyapp
-        image: gcr.io/triple-nectar-391006/pyapp/pyapp:latest
+        image: eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest
         ports:
         - containerPort: 5000
       affinity:
