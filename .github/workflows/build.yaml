@@ -17,7 +17,6 @@ env:
   GCP_WORKFLOW_SA: github-actions-workflow@triple-nectar-391006.iam.gserviceaccount.com
   GCP_WORKLOAD_IDENTITY: projects/435965541776/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
   DOCKER_RGSTRY_NAME: docker-registry
-  DOCKER_RGSTRY_URL: https://${{ env.GCP_REGION }}-docker.pkg.dev
 
 jobs:
   build:
@@ -40,6 +39,8 @@ jobs:
         service_account: ${{ env.GCP_WORKFLOW_SA }}
 
     - name: Connect to Artifact Registry
+      env:
+        DOCKER_RGSTRY_URL: https://${{ env.GCP_REGION }}-docker.pkg.dev
       run: |-
         echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin ${{ env.DOCKER_RGSTRY_URL }}
 
