@@ -12,6 +12,19 @@ metadata:
   name: pyapp
   namespace: dev
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyapp
+  namespace: dev
+spec:
+  selector:
+    app: pyapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

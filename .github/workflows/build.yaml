@@ -15,6 +15,7 @@ env:
   GKE_PROJECT_ID: triple-nectar-391006
   GKE_CLUSTER_NAME: primary
   GKE_CLUSTER_ZONE: europe-west1-b
+  DOCKER_REPO_REGION: europe-west1
 
 jobs:
   build:
@@ -38,7 +39,13 @@ jobs:
 
     - name: Connect to Artifact Registry
       run: |-
-        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev
+
+    - name: Build Docker image
+      run: docker build -t ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/pyapp/pyapp:latest pyapp
+
+    - name: Publish Docker image to Google Artifact Registry
+      run: docker push ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/pyapp/pyapp:latestt
 
     - name: Connect to GKE
       uses: google-github-actions/get-gke-credentials@v0
@@ -46,11 +53,5 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER_NAME }}
         location: ${{ env.GKE_CLUSTER_ZONE }}
 
-    - name: Build Docker image
-      run: docker build -t eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest pyapp
-
-    - name: Publish Docker image to Google Artifact Registry
-      run: docker push eu.gcr.io/triple-nectar-391006/pyapp/pyapp:latest
-
-    - name: Deploy to GKE
-      run: kubectl apply -f pyapp/deployment.yaml
+#    - name: Deploy to GKE
+#      run: kubectl apply -f pyapp/deployment.yaml
