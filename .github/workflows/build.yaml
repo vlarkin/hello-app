@@ -45,3 +45,12 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER_NAME }}
         location: ${{ env.GKE_CLUSTER_ZONE }}
+
+    - name: Build Docker image
+      run: docker build -t pyapp pyapp
+
+    - name: Publish Docker image to Google Artifact Registry
+      run: docker push pyapp
+
+    - name: Deploy to GKE
+      run: kubectl apply -f pyapp/deployment.yaml
