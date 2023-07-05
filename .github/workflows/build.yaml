@@ -16,7 +16,7 @@ env:
   GKE_CLUSTER_ZONE: europe-west1-b
   GCP_WORKFLOW_SA: github-actions-workflow@triple-nectar-391006.iam.gserviceaccount.com
   GCP_WORKLOAD_IDENTITY: projects/435965541776/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
-  DOCKER_RGSTRY_NAME: docker-registry
+  DOCKER_REGISTRY_NAME: docker-registry
 
 jobs:
   build:
@@ -40,15 +40,15 @@ jobs:
 
     - name: Connect to Artifact Registry
       env:
-        DOCKER_RGSTRY_URL: https://${{ env.GCP_REGION }}-docker.pkg.dev
+        DOCKER_REGISTRY_HOST: ${{ env.GCP_REGION }}-docker.pkg.dev
       run: |-
-        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin ${{ env.DOCKER_RGSTRY_URL }}
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_REGISTRY_HOST }}
 
     - name: Build Docker image
-      run: docker build -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_RGSTRY_NAME }}/pyapp:latest pyapp
+      run: docker build -t ${{ env.DOCKER_REGISTRY_HOST }}/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_REGISTRY_NAME }}/pyapp:latest pyapp
 
     - name: Publish Docker image to Google Artifact Registry
-      run: docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_RGSTRY_NAME }}/pyapp:latest
+      run: docker push ${{ env.DOCKER_REGISTRY_HOST }}/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_REGISTRY_NAME }}/pyapp:latest
 
     - name: Connect to GKE
       uses: google-github-actions/get-gke-credentials@v0
