@@ -10,13 +10,13 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GCP_WORKLOAD_IDENTITY: projects/435965541776/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
+  GCP_PROJECT_NAME: triple-nectar-391006
   GCP_SERVICE_ACCOUNT_NAME: github-actions-workflow
-  GKE_PROJECT_ID: triple-nectar-391006
-  GKE_CLUSTER_NAME: primary
+  GCP_WORKLOAD_IDENTITY: projects/435965541776/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
+  GKE_CLUSTER_NAME: applications
   GKE_CLUSTER_ZONE: europe-west1-b
-  DOCKER_REPO_REGION: europe-west1
-  DOCKER_REPO_NAME: docker-repo
+  DOCKER_RGSTR_REGION: europe-west1
+  DOCKER_RGSTR_NAME: docker-registry
 
 jobs:
   build:
@@ -36,17 +36,17 @@ jobs:
         create_credentials_file: true
         token_format: access_token
         workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY }}
-        service_account: ${{ env.GCP_SERVICE_ACCOUNT_NAME }}@${{ env.GKE_PROJECT_ID }}.iam.gserviceaccount.com
+        service_account: ${{ env.GCP_SERVICE_ACCOUNT_NAME }}@${{ env.GCP_PROJECT_NAME }}.iam.gserviceaccount.com
 
     - name: Connect to Artifact Registry
       run: |-
-        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_RGSTR_REGION }}-docker.pkg.dev
 
     - name: Build Docker image
-      run: docker build -t ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.GKE_PROJECT_ID }}/${{ env.DOCKER_REPO_NAME }}/pyapp:latest pyapp
+      run: docker build -t ${{ env.DOCKER_RGSTR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_NAME }}/${{ env.DOCKER_RGSTR_NAME }}/pyapp:latest pyapp
 
     - name: Publish Docker image to Google Artifact Registry
-      run: docker push ${{ env.DOCKER_REPO_REGION }}-docker.pkg.dev/${{ env.GKE_PROJECT_ID }}/${{ env.DOCKER_REPO_NAME }}/pyapp:latest
+      run: docker push ${{ env.DOCKER_RGSTR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_NAME }}/${{ env.DOCKER_RGSTR_NAME }}/pyapp:latest
 
     - name: Connect to GKE
       uses: google-github-actions/get-gke-credentials@v0
