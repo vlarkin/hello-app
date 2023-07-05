@@ -43,7 +43,7 @@ spec:
       serviceAccountName: pyapp
       containers:
       - name: pyapp
-        image: europe-west1-docker.pkg.dev/triple-nectar-391006/docker-registry/pyapp:latest
+        image: APP_DOCKER_IMAGE
         ports:
         - containerPort: 5000
       affinity:

@@ -47,7 +47,7 @@ jobs:
         echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.DOCKER_REGISTRY_HOST }}
 
     - name: Set Docker image tag
-      run: echo "IMAGE_TAG=${{ env.DOCKER_REGISTRY_HOST }}/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_REGISTRY_NAME }}/${{ env.APP_NAME }}:latest" >> $GITHUB_ENV
+      run: echo "IMAGE_TAG=${{ env.DOCKER_REGISTRY_HOST }}/${{ env.GCP_PROJECT_ID }}/${{ env.DOCKER_REGISTRY_NAME }}/${{ env.APP_NAME }}:$GITHUB_SHA" >> $GITHUB_ENV
 
     - name: Build Docker image
       run: docker build -t ${{ env.IMAGE_TAG }} ${{ env.APP_NAME }}
@@ -60,6 +60,9 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER_NAME }}
         location: ${{ env.GKE_CLUSTER_ZONE }}
+
+    - name: Set new docker image version in deployment.yaml
+      run: sed -i 's|APP_DOCKER_IMAGE|${{ env.IMAGE_TAG }}|g' pyapp/deployment.yaml
 
     - name: Deploy to GKE
       run: kubectl apply -f pyapp/deployment.yaml
