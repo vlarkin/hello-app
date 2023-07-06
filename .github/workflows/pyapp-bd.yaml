@@ -1,9 +1,11 @@
-name: Build
+name: Build and Deploy for pyapp
 run-name: build by ${{ github.actor }}
 
 on:
   workflow_dispatch:
   push:
+    paths:
+    - 'pyapp/**'
 
 concurrency:
   group: "${{ github.workflow }}/${{ github.ref }}"
