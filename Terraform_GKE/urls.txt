@@ -1,0 +1,15 @@
+
+How to Create GKE Cluster Using TERRAFORM
+https://antonputra.com/google/create-gke-cluster-using-terraform/#gke-workload-identity-tutorial-example-2
+https://github.com/antonputra/tutorials/tree/main/lessons/108
+
+Provision a GKE Cluster
+https://developer.hashicorp.com/terraform/tutorials/kubernetes/gke
+
+Workload Identity
+https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity
+https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+
+Deploying to GKE using Github Actions
+https://cloud.google.com/dotnet/docs/getting-started/deploying-to-gke-using-github-actions
+https://nakamasato.medium.com/setup-github-actions-and-terraform-for-a-new-gcp-project-b740f561107
