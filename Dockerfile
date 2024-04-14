@@ -1,6 +1,6 @@
 FROM python:3.11-alpine
 
-ENV VERSION=1.1
+ENV VERSION=1.2
 
 RUN mkdir /app
 WORKDIR /app
